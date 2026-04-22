@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Le Jardin de Lan - Plantes exceptionnelles{% endblock %}
+
+{% block body %}
+
+    <!-- Hero Section -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Le Jardin de Lan</h1>
+                <p class="lead fw-normal text-white-50 mb-0">
+                    Des plantes rares et de qualité pour sublimer votre jardin et intérieur
+                </p>
+                <a href="{{ path('plant_galerie') }}" class="btn btn-light btn-lg mt-4 px-5">
+                    Découvrir la collection
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section Plantes en vedette -->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h2 class="fw-bolder">Plantes disponibles</h2>
+                <a href="{{ path('plant_galerie') }}" class="btn btn-outline-dark">
+                    Voir toute la collection →
+                </a>
+            </div>
+
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                
+                {% for plant in plants %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <img 
+                            class="card-img-top" 
+                            src="{{ plant.mainImage ? asset('uploads/plants/' ~ plant.mainImage) : asset('images/placeholder-plant.jpg') }}" 
+                            alt="{{ plant.commonName }}"
+                            style="height: 240px; object-fit: cover;">
+
+                        <div class="card-body p-4 text-center">
+                            <h5 class="fw-bolder">{{ plant.commonName }}</h5>
+                            <p class="text-muted small mb-2">{{ plant.scientificName }}</p>
+                            <p class="card-text">{{ plant.shortDescription|slice(0, 90) ~ '...' }}</p>
+                        </div>
+
+                        <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
+                            <div class="text-center">
+                                <span class="h4 fw-bold text-success">{{ plant.price|format_currency('EUR') }}</span><br>
+                                {% if plant.isAvailable %}
+                                    <a href="{{ path('plant_show', { slug: plant.slug }) }}" 
+                                       class="btn btn-outline-dark mt-3">Détails & Achat</a>
+                                {% else %}
+                                    <span class="btn btn-secondary mt-3 disabled">Indisponible</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

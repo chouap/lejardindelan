@@ -16,28 +16,15 @@ class PlantRepository extends ServiceEntityRepository
         parent::__construct($registry, Plant::class);
     }
 
-    //    /**
-    //     * @return Plant[] Returns an array of Plant objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Plant
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findBySearch(string $search): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.commonName LIKE :search')
+            ->orWhere('p.scientificName LIKE :search')
+            ->orWhere('p.shortDescription LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('p.commonName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
